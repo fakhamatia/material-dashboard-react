@@ -17,6 +17,7 @@ import { useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -39,10 +40,28 @@ import OrdersOverview from "layouts/rtl/components/OrdersOverview";
 
 import { AdapterDateFnsJalali } from "@mui/x-date-pickers/AdapterDateFnsJalali";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setDirection } from "context";
+
+function DateTimePickerTextField(properties) {
+  const { badge, inputProps, InputProps, error, sx, ...other } = properties;
+  return (
+    <TextField
+      {...inputProps}
+      {...other}
+      badge={badge}
+      error={error}
+      InputProps={{ endAdornment: InputProps?.endAdornment }}
+      // eslint-disable-next-line react/jsx-no-duplicate-props
+      inputProps={{ style: { direction: "ltr", paddingLeft: "0px" } }}
+      inputRef={inputProps.ref}
+      ref={InputProps?.ref}
+      sx={sx}
+    />
+  );
+}
 
 function RTL() {
   const [, dispatch] = useMaterialUIController();
@@ -62,7 +81,13 @@ function RTL() {
         <MDBox>
           <Grid container spacing={3}>
             <LocalizationProvider dateAdapter={AdapterDateFnsJalali}>
-              <DatePicker label="Date Picker" defaultValue={new Date(2022, 1, 1)} />
+              <DateTimePicker
+                format="yyyy/MM/dd EEEE HH:mm:ss"
+                label="Date Picker"
+                defaultValue={new Date(2022, 1, 1)}
+                slots={{ textField: DateTimePickerTextField }}
+                sx={{ width: "400px" }}
+              />
             </LocalizationProvider>
           </Grid>
         </MDBox>
